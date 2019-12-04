@@ -5,18 +5,20 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.example.arken.R
 import com.example.arken.model.Article
 import com.example.arken.util.RetroClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+
 
 class ArticleDetail : Fragment() {
     private lateinit var editButton: Button
@@ -31,9 +33,9 @@ class ArticleDetail : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView =
-            inflater.inflate(R.layout.fragment_article_details, container, false)
-        title = rootView.findViewById(R.id.article_detail_title)
-        text = rootView.findViewById(R.id.article_detail_text)
+            inflater.inflate(com.example.arken.R.layout.fragment_article_details, container, false)
+        title = rootView.findViewById(com.example.arken.R.id.article_detail_title)
+        text = rootView.findViewById(com.example.arken.R.id.article_detail_text)
 
 
         return rootView
@@ -65,5 +67,14 @@ class ArticleDetail : Fragment() {
                 Toast.makeText(context, t.message, Toast.LENGTH_SHORT).show()
             }
         })
+
+        text.setOnLongClickListener(OnLongClickListener {
+            text.setCursorVisible(true)
+            Toast.makeText(context, text.text.subSequence(text.selectionStart, text.selectionEnd), Toast.LENGTH_SHORT).show()
+
+            true
+        })
+
+
     }
 }
