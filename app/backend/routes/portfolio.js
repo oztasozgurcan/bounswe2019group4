@@ -50,7 +50,8 @@ router.get('/:id',[ multipleModelBinder([
 */
 router.delete('/:id',[ isAuthenticated, multipleModelBinder([
   [Portfolio, 'Portfolio'],
-  [PortfolioTradingEq, 'PortfolioTradingEq']
+  [PortfolioTradingEq, 'PortfolioTradingEq'],
+  [PortfolioFollow, 'PortfolioFollow']
 ])], portfolioController.deletePortfolio)
 
 /*

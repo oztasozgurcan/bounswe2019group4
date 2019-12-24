@@ -152,7 +152,8 @@ module.exports.editPortfolio = async (request, response) => {
   module.exports.deletePortfolio = async (request, response) => {
     let Portfolio = request.models['Portfolio']
     let PortfolioTradingEq = request.models['PortfolioTradingEq']
-  
+    let PortfolioFollow = request.models['PortfolioFollow']
+
     Portfolio.deleteOne({ _id : request.params['id'], userId : request.session['user']._id }, (err, results) => {
       if(err){
         return response.status(404).send({
@@ -165,8 +166,16 @@ module.exports.editPortfolio = async (request, response) => {
           return response.status(404).send({
             errmsg: "Failed to delete portfolio - trading eq. instances."
           })
+        }
+
+        PortfolioFollow.deleteMany({ PortfolioId : request.params['id']}, (err, results) => {
+        if(err){
+          return response.status(404).send({
+            errmsg: "Failed to delete portfolio - follow instances."
+          })
         }       
         return response.status(204).send(); 
+      });    
       });
     });
   }
