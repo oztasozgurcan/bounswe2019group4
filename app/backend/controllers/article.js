@@ -49,24 +49,24 @@ module.exports.postArticle = async (request, response) => {
       userId: request.session['user']._id,
       date: new Date()
     });
-
-    let queryKeyword = request.body.title.split(' ').join('+')
-    let tags = await axios.get(`https://api.datamuse.com/words?max=20&ml=${queryKeyword}`)
-    tags = tags.data.map(el => el.word)
-    article.tags = tags
-
-    queryKeyword = request.body.text.split(' ').join('+')
-    tags = await axios.get(`https://api.datamuse.com/words?max=20&ml=${queryKeyword}`)
-    tags = tags.data.map(el => el.word)
-    article.tags.concat(tags)
-    
-    // Saves the instance into the database, returns any error occured
-    article.save()
-      .then(doc => {
-      return response.status(200).send(doc);
-    }).catch(error => {
-      return response.status(400).send(error);
-    });
+    try {
+      let queryKeyword = request.body.title.replace(/[^a-z\s]/gi, '').replace(/\s+/gi, '+')
+      let tags = await axios.get(`https://api.datamuse.com/words?max=20&ml=${queryKeyword}`)
+      tags = tags.data.map(el => el.word)
+      article.tags = tags
+  
+      // Saves the instance into the database, returns any error occured
+      article.save()
+        .then(doc => {
+        return response.status(200).send(doc);
+      }).catch(error => {
+        return response.status(400).send(error);
+      });
+      
+    } catch (error) {
+      console.log(error)
+      return response.sendStatus(400)
+    }
   }
   
   /*
