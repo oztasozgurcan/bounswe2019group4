@@ -3,7 +3,6 @@ const { model, Schema } = mongoose;
 
 const schema = new Schema(
   {
-    id: String,
     type: {
       type: String
     },
