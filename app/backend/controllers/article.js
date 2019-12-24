@@ -69,7 +69,8 @@ module.exports.postArticle = async (request, response) => {
       });
       
     } catch (error) {
-      console.log
+      console.log(error)
+      return response.sendStatus(400)
     }
   }
   
